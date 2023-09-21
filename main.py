@@ -1,6 +1,4 @@
 import sys
-
-# Import the Consulta class and other necessary libraries
 from consulta import Consulta
 
 def main():
@@ -14,11 +12,14 @@ def main():
 
     # Create a Consulta instance with the provided RUT
     consulta = Consulta(rut)
-
+    
     try:
-        # Perform the RUT query and retrieve the result
-        result = consulta.resultado()
-        print(result)
+        if consulta.validate():
+            # Perform the RUT query and retrieve the result
+            result = consulta.resultado()
+            print(result)
+        else:
+            print("Rut invalido")
     except Exception as e:
         print(f"Error: {e}")
 
