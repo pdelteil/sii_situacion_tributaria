@@ -15,3 +15,7 @@ python main.py RUT
 ex: python main.py 76632059-7
 
 ``` 
+
+# Alternativa
+
+`curl -sX GET 'https://siichile.herokuapp.com/consulta?rut=76632059-7' -H 'Content-Type: application/json' -H 'Accept: application/json'` 
