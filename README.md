@@ -1,6 +1,8 @@
 # sii_situacion_tributaria
 Script para consultar situación tributaria de terceros. Versión web https://zeus.sii.cl/cvc_cgi/stc/getstc
 
+Traducción de Ruby a Python de [@sii](https://github.com/sagmor/sii_chile)
+
 # Cómo usar
 
 ```
