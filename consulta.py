@@ -21,7 +21,6 @@ class Consulta:
         rut = rut_formatted.split('-')[0]
         dv  = rut_formatted.split('-')[1]
 
-
         data = {
             'RUT': rut,
             'DV':  dv,
@@ -43,13 +42,42 @@ class Consulta:
             }
             for node in data.xpath(self.XPATH_ACTIVIDADES)[1:]
         ]
-        inicio_actividades = data.xpath("//span[contains(text(),'Contribuyente presenta Inicio de Actividades:')]/text()")[0].split(":", 1)[-1].strip()
+        # Initialize a list to store the extracted data
+        documentos_timbrados = []
+
+        # Extract the table rows
+        table_rows = data.xpath("//table[@class='tabla']/tr")
+
+        # Skip the header row (first row)
+        for row in table_rows[1:]:
+            # Extract data from the row
+            cells = row.xpath("td/font/text()")
+            if len(cells) == 2:
+                documento = cells[0].strip()
+                ultimo_timbraje = cells[1].strip()
+                
+                # Create a dictionary for each row and append it to the list
+                documento_info = {
+                    'Documento': documento,
+                    'Año último timbraje': ultimo_timbraje
+                }
+                documentos_timbrados.append(documento_info)
+
+        inicio_actividades       = data.xpath("//span[contains(text(),'Contribuyente presenta Inicio de Actividades:')]/text()")[0].split(":", 1)[-1].strip()
+        fecha_inicio_actividades = data.xpath("//span[contains(text(),'Fecha de Inicio de Actividades:')]/text()")[0].split(":", 1)[-1].strip()
+        empresa_menor_tamano     = data.xpath("//span[contains(text(),'Contribuyente es Empresa de Menor Tama')]/text()[last()]")[0].split(":", 1)[-1].strip()
+        aut_moneda_extranjera    = data.xpath("//span[contains(text(),'Contribuyente autorizado para declarar y pagar sus impuestos en moneda extranjera:')]/text()")[0].split(":", 1)[-1].strip()
 
         data_dict = {
             'rut': self.rut,
             'razon_social': data.xpath(self.XPATH_RAZON_SOCIAL)[0].text.strip(),
+            'empresa_menor_tamano': empresa_menor_tamano,
+            'aut_moneda_extranjera': aut_moneda_extranjera,
             'inicio_actividades': inicio_actividades,
-            'actividades': actividades}
+            'fecha_inicio_actividades': fecha_inicio_actividades,
+            'actividades': actividades,
+            'documentos_timbrados': documentos_timbrados
+            }
         # Serialize the dictionary as JSON
         json_data = json.dumps(data_dict, ensure_ascii=False, indent=4)
 
