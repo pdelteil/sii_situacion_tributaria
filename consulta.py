@@ -30,7 +30,6 @@ class Consulta:
             'txt_captcha': captcha['captcha']
         }
         response = requests.post('https://zeus.sii.cl/cvc_cgi/stc/getstc', data=data)
-        print(response.text)
         data = html.fromstring(response.text)
 
         actividades = [
