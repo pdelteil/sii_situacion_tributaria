@@ -62,10 +62,24 @@ class Consulta:
                 }
                 documentos_timbrados.append(documento_info)
 
-        inicio_actividades       = data.xpath("//span[contains(text(),'Contribuyente presenta Inicio de Actividades:')]/text()")[0].split(":", 1)[-1].strip()
-        fecha_inicio_actividades = data.xpath("//span[contains(text(),'Fecha de Inicio de Actividades:')]/text()")[0].split(":", 1)[-1].strip()
-        empresa_menor_tamano     = data.xpath("//span[contains(text(),'Contribuyente es Empresa de Menor Tama')]/text()[last()]")[0].split(":", 1)[-1].strip()
-        aut_moneda_extranjera    = data.xpath("//span[contains(text(),'Contribuyente autorizado para declarar y pagar sus impuestos en moneda extranjera:')]/text()")[0].split(":", 1)[-1].strip()
+        xpath_inicio_actividades = data.xpath("//span[contains(text(),'Contribuyente presenta Inicio de Actividades:')]/text()")
+        xpath_fecha_inicio_actividades = data.xpath("//span[contains(text(),'Fecha de Inicio de Actividades:')]/text()")
+        xpath_empresa_menor_tamano = data.xpath("//span[contains(text(),'Contribuyente es Empresa de Menor Tama')]/text()[last()]")
+        xpath_aut_moneda_extranjera =  data.xpath("//span[contains(text(),'Contribuyente autorizado para declarar y pagar sus impuestos en moneda extranjera:')]/text()")
+
+        inicio_actividades = ""
+        fecha_inicio_actividades = ""
+        empresa_menor_tamano = ""
+        aut_moneda_extranjera = ""
+
+        if len(xpath_inicio_actividades) != 0:
+            inicio_actividades = xpath_inicio_actividades[0].split(":", 1)[-1].strip()
+        if len(xpath_fecha_inicio_actividades) != 0:
+            fecha_inicio_actividades = xpath_fecha_inicio_actividades[0].split(":", 1)[-1].strip()
+        if len(xpath_empresa_menor_tamano) != 0:
+            empresa_menor_tamano = xpath_empresa_menor_tamano[0].split(":", 1)[-1].strip()
+        if len(xpath_aut_moneda_extranjera) != 0:
+            aut_moneda_extranjera    = xpath_aut_moneda_extranjera[0].split(":", 1)[-1].strip()
 
         data_dict = {
             'rut': self.rut,
