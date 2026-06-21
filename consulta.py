@@ -44,8 +44,16 @@ class Consulta:
         # Initialize a list to store the extracted data
         documentos_timbrados = []
 
-        # Extract the table rows
-        table_rows = data.xpath("//table[@class='tabla']/tr")
+        # Extract the table rows. Anchor to the "Documentos Timbrados" table
+        # specifically: the page has several class="tabla" tables, and the
+        # previous "//table[@class='tabla']/tr" mixed rows from all of them, so
+        # the date ranges of the "non-electronic authorization" table leaked in
+        # as bogus documents (e.g. {"Documento": "01-02-2017", ...}).
+        timbrados = data.xpath(
+            "//strong[contains(text(),'Documentos Timbrados')]"
+            "/following::table[@class='tabla'][1]"
+        )
+        table_rows = timbrados[0].xpath("./tr") if timbrados else []
 
         # Skip the header row (first row)
         for row in table_rows[1:]:
